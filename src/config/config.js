@@ -33,12 +33,12 @@ config.client = process.env.CLIENT_URL || '*';
 /* Swagger Definition */
 config.swaggerDefinition = {
   info: {
-    title: 'PRDXN Node API Boilerplate',
+    title: 'E-commerce mobile store',
     version: '1.0.0',
     description: '',
   },
   host: process.env.HOST || 'localhost:8000',
-  basePath: '/api',
+  basePath: '/admin-editor',
   securityDefinitions: {
     bearerAuth: {
       type: 'apiKey',
