@@ -7,7 +7,7 @@ if (database.toLowerCase() === 'mongodb') {
   //Bring in the mongoose module
   const mongoose = require('mongoose');
   // const { url, name } = dbCredentials.noSqlDbConfig;
-  const dbURI = `mongodb+srv://Atul:test@mobile-store.y8wmesj.mongodb.net/?retryWrites=true&w=majority`;
+  const dbURI = process.env.DB_URI;
 
   //console to check what is the dbURI refers to
   console.log('Database URL is => ', dbURI);

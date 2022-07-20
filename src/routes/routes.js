@@ -24,7 +24,7 @@ const dependencies = require('./routesDependencies').default;
  */
 router.get('/health', dependencies.serverHealth.checkHealth);
 
-router.use('/app', passport.authenticate('jwt', { session : false }), appRoutes);
+router.use('/admin-editor', passport.authenticate('jwt', { session : false }), appRoutes);
 router.use('/auth', authRoutes);
 
 module.exports = router;
