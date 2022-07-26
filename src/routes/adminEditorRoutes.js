@@ -4,7 +4,7 @@ const checkRole = require('../middlewares/authrole');
 
 /**
  * @swagger
- * /admin-editor/add-mobile:
+ * /admin/add-mobile:
  *  post:
  *    tags:
  *      - Authorization actions
@@ -41,8 +41,8 @@ const checkRole = require('../middlewares/authrole');
  *      500:
  *        description: Internal server error.
  */
-router.post('/add-mobile', checkRole(['admin', 'superadmin']), dependencies.adminClient.addMobile);
-router.patch('/update-mobile/:id', checkRole(['admin', 'superadmin']), dependencies.adminClient.updateMobile);
-router.delete('/delete-mobile/:id', checkRole(['admin', 'superadmin']), dependencies.adminClient.deleteMobile);
+router.post('/add', checkRole(['admin', 'superadmin']), dependencies.adminClient.addMobile);
+router.patch('/update/:id', checkRole(['admin', 'superadmin']), dependencies.adminClient.updateMobile);
+router.delete('/delete/:id', checkRole(['admin', 'superadmin']), dependencies.adminClient.deleteMobile);
 
 module.exports = router;

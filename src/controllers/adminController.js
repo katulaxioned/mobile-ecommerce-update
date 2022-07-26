@@ -16,15 +16,15 @@ exports.addMobile = (req, res) => {
       if (err) {
         return res
           .status(500)
-          .json(utils.responseMsg(errorMsg.internalServerError));
+          .send(utils.responseMsg(errorMsg.dbError));
       } else {
-        return res.status(201).json(utils.responseMsg(null, true, newMobile));
+        return res.status(201).send(utils.responseMsg(null, true, newMobile));
       }
     });
   } catch (err) {
     return res
       .status(500)
-      .json(utils.responseMsg(errorMsg.internalServerError));
+      .send(utils.responseMsg(err));
   }
 };
 
@@ -32,12 +32,12 @@ exports.updateMobile = async (req, res) => {
   try {
     const { id } = req.params;
     const { brand, device, price, quantity } = req.body;
-    const newMobile = {};
-
-    newMobile.brand = brand;
-    newMobile.device = device;
-    newMobile.price = price;
-    newMobile.quantity = quantity;
+    const newMobile = {
+      brand: brand,
+      device: device,
+      price: price,
+      quantity: quantity
+    };
     let result = await Mobile.findOneAndUpdate({ _id: id }, newMobile, {
       new: true,
       runValidators: true,
@@ -45,13 +45,13 @@ exports.updateMobile = async (req, res) => {
     if (!result) {
       return res
         .status(500)
-        .json(utils.responseMsg(errorMsg.internalServerError));
+        .send(utils.responseMsg(errorMsg.dbError));
     }
-    return res.status(200).json(utils.responseMsg(null, true, result));
+    return res.status(200).send(utils.responseMsg(null, true, result));
   } catch (err) {
     return res
       .status(500)
-      .json(utils.responseMsg(errorMsg.internalServerError));
+      .send(utils.responseMsg(err));
   }
 };
 
@@ -60,14 +60,14 @@ exports.deleteMobile = async (req, res) => {
     const { id } = req.params;
     const result = await Mobile.deleteOne({ _id: id });
     if (result.deletedCount) {
-      return res.status(200).json(utils.responseMsg(null, true, result));
+      return res.status(200).send(utils.responseMsg(null, true, result));
     }
     return res
       .status(500)
-      .json(utils.responseMsg(errorMsg.internalServerError));
+      .send(utils.responseMsg(errorMsg.dbError));
   } catch (error) {
     return res
       .status(500)
-      .json(utils.responseMsg(errorMsg.internalServerError));
+      .send(utils.responseMsg(errorMsg.internalServerError));
   }
 };

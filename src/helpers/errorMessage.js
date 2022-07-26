@@ -31,4 +31,8 @@ exports.errorMessages = {
     code: 'Unauthorized',
     message: 'Access Denied',
   },
+  dbError: {
+    code: 'Database connection error',
+    message: 'Operation failed'
+  }
 };
