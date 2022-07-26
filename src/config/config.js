@@ -38,13 +38,14 @@ config.swaggerDefinition = {
     description: '',
   },
   host: process.env.HOST || 'localhost:8000',
-  basePath: '/admin-editor',
+  basePath: '/api',
   securityDefinitions: {
     bearerAuth: {
       type: 'apiKey',
       name: 'Authorization',
       scheme: 'bearer',
       in: 'header',
+      bearerFormat: 'JWT',
     },
   },
 };

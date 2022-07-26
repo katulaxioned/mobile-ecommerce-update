@@ -36,6 +36,8 @@ const checkRole = require('../middlewares/authrole');
  *    responses:
  *      201:
  *        description: Success true and a newly created mobile data will be in response.
+ *      401:
+ *        description: You are unauthorized to access this route.
  *      500:
  *        description: Internal server error.
  */

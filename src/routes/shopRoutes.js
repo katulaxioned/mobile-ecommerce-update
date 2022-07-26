@@ -3,12 +3,12 @@ const dependencies = require('./routesDependencies').default;
 
 /**
  * @swagger
- * /api/shop/mobiles:
+ * /shop/mobiles:
  *  get:
  *    tags:
  *      - Mobile store
  *    name: Local Mobiles API
- *    summary: Based on user's data, this api shows mobiles depending upon user request.
+ *    summary: This api shows all mobiles in store.
  *    produces:
  *      - application/json
  *    responses:
@@ -17,6 +17,6 @@ const dependencies = require('./routesDependencies').default;
  *      500:
  *        description: Internal server error.
  */
- router.get("/mobiles", dependencies.shopClient.showAllMobiles);
+router.get('/mobiles', dependencies.shopClient.showAllMobiles);
 
 module.exports = router;
