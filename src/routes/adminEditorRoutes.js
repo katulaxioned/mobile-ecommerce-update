@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const dependencies = require('./routesDependencies').default;
+const checkRole = require('../middlewares/authrole');
 
 /**
  * @swagger
@@ -38,8 +39,8 @@ const dependencies = require('./routesDependencies').default;
  *      500:
  *        description: Internal server error.
  */
-router.post('/add-mobile', dependencies.adminClient.addMobile)
-router.patch('/update-mobile/:id', dependencies.adminClient.updateMobile)
-router.delete('/delete-mobile/:id', dependencies.adminClient.deleteMobile)
+router.post('/add-mobile', checkRole(['admin', 'superadmin']), dependencies.adminClient.addMobile);
+router.patch('/update-mobile/:id', checkRole(['admin', 'superadmin']), dependencies.adminClient.updateMobile);
+router.delete('/delete-mobile/:id', checkRole(['admin', 'superadmin']), dependencies.adminClient.deleteMobile);
 
 module.exports = router;

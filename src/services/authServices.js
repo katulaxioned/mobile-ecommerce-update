@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
+const User = require('../models/user');
 const {
   secret,
   expireIn,
@@ -13,11 +14,15 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.algorithms = [algorithm, 'HS256'];
 opts.secretOrKey = secret;
 passport.use(
-  new JwtStrategy(opts, (token, done) => {
+  new JwtStrategy(opts, async (token, done) => {
     try {
-      done(null, token);
+      const validateUser = await User.findOne({ email: token.email});
+      if (!validateUser) {
+        return done(null, false);
+      }
+      return done(null, validateUser);
     } catch (error) {
-      done(error);
+      return done(error);
     }
   })
 );

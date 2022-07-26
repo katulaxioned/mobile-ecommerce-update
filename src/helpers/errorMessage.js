@@ -23,4 +23,12 @@ exports.errorMessages = {
     code: 'Bad Request',
     message: 'Data doesn\'t exist',
   },
+  noUserExist: {
+    code: 'Bad Request',
+    message: 'User doesn\'t exist',
+  },
+  notAllowed: {
+    code: 'Unauthorized',
+    message: 'Access Denied',
+  },
 };
