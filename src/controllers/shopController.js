@@ -12,6 +12,6 @@ exports.showAllMobiles = async (req, res, next) => {
         const result = await Mobile.find();
         return res.status(200).json(utils.responseMsg(null, true, result));
     } catch (err) {
-        return res.status(500).json(utils.responseMsg(errorMsg.internalServerError));
+        return res.status(500).json(utils.responseMsg(err));
     }
 }
