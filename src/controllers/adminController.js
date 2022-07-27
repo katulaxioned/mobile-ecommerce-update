@@ -68,6 +68,6 @@ exports.deleteMobile = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .send(utils.responseMsg(errorMsg.internalServerError));
+      .send(utils.responseMsg(error));
   }
 };
