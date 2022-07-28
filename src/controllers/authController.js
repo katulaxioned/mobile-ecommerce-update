@@ -1,7 +1,7 @@
 const authService = require('../services/authServices');
 const errorMsg = require('../helpers/errorMessage').errorMessages;
 const utils = require('../helpers/utils');
-const Joi = require('joi');
+const Joi = require("joi");
 
 const User = require('../models/user');
 
