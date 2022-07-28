@@ -10,8 +10,8 @@ const Mobile = require('../models/mobile');
 exports.showAllMobiles = async (req, res, next) => {
     try {
         const result = await Mobile.find();
-        return res.status(200).json(utils.responseMsg(null, true, result));
+        return res.status(200).send(utils.responseMsg(null, true, result));
     } catch (err) {
-        return res.status(500).json(utils.responseMsg(err));
+        return res.status(500).send(utils.responseMsg(err));
     }
 }

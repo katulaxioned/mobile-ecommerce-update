@@ -5,10 +5,10 @@ const Joi = require('joi');
 
 const User = require('../models/user');
 
-const authSchema = Joi.object({
+const registerSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(4).max(18).required(),
-  role: Joi.string().valid('employee','admin','superadmin').required()
+  role: Joi.string().valid('employee','admin','superadmin').required(),
 });
 
 const options = { abortEarly : false };
@@ -21,16 +21,17 @@ exports.register = async (req, res) => {
   try {
     const { email, password, role } = req.body;
 
-    let data = { email, password}
-    const { error: { details: err } } = authSchema.validate(data, options);
-    return res.send(err); 
-    // tommarow start remaing impliment from here.
+    let data = { email, password, role};
+    const validationResult = utils.validateProvidedData(registerSchema, data, options);
+    if (validationResult) {
+      return res.status(422).send(utils.responseMsg(validationResult));
+    }
     const result = await User.findOne({ email: email });
     // check for user exists or not.
     if (result) {
       return res
         .status(409)
-        .json(utils.responseMsg(errorMsg.duplicateDataProvided));
+        .send(utils.responseMsg(errorMsg.duplicateUserProvided));
     }
     const newUser = new User({
       email: email,
@@ -41,16 +42,21 @@ exports.register = async (req, res) => {
       if (err)
         return res
           .status(500)
-          .json(utils.responseMsg(errorMsg.dbError));
+          .send(utils.responseMsg(errorMsg.dbError));
     });
-    return res.status(200).json(utils.responseMsg(null, true, newUser));
+    return res.status(200).send(utils.responseMsg(null, true, newUser));
   } catch (error) {
     console.error('error', error.stack);
     return res
       .status(500)
-      .json(utils.responseMsg(error));
+      .send(utils.responseMsg(error));
   }
 };
+
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(4).max(18).required()
+});
 
 /**
  * @description Local login controller.
@@ -59,11 +65,15 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    const data = { email, password };
+    const validationResult = utils.validateProvidedData(loginSchema, data, options);
+    if (validationResult) {
+      return res.status(422).send(utils.responseMsg(validationResult));
+    }
     const validUser = await User.findOne({ email: email });
 
     if (!validUser) {
-      return res.status(500).json(utils.responseMsg(errorMsg.noUserExist));
+      return res.status(500).send(utils.responseMsg(errorMsg.noUserExist));
     }
 
     if (validUser.password === password) {
@@ -75,17 +85,17 @@ exports.login = async (req, res) => {
           role: validUser.role,
         }),
       };
-      return res.status(200).json(utils.responseMsg(null, true, message));
+      return res.status(200).send(utils.responseMsg(null, true, message));
     }
 
     return res
       .status(403)
-      .json(utils.responseMsg('Invalid Login credentials'));
+      .send(utils.responseMsg('Invalid Login credentials'));
     //Please replace dummy payload with your actual object for creating token.
   } catch (error) {
     console.error('error', error.stack);
     return res
       .status(500)
-      .json(utils.responseMsg(error));
+      .send(utils.responseMsg(error));
   }
 };

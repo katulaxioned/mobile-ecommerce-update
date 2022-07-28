@@ -19,6 +19,10 @@ exports.errorMessages = {
     code: 'Bad Request',
     message: 'Duplicate Data Provided.',
   },
+  duplicateUserProvided: {
+    code: 'Bad Request',
+    message: 'Duplicate User Data Provided.',
+  },
   noDataExist: {
     code: 'Bad Request',
     message: 'Data doesn\'t exist',
