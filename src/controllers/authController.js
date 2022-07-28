@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
   try {
     const { email, password, role } = req.body;
 
-    let data = { email, password, role};
+    const data = { email, password, role};
     const validationResult = utils.validateProvidedData(registerSchema, data, options);
     if (validationResult) {
       return res.status(422).send(utils.responseMsg(validationResult));

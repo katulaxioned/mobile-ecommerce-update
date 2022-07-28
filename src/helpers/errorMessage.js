@@ -38,5 +38,13 @@ exports.errorMessages = {
   dbError: {
     code: 'Database connection error',
     message: 'Operation failed'
+  },
+  idNotValid: {
+    code: 'Bad Request',
+    message: 'Provided unvalid id',
+  },
+  productNotFound: {
+    code: 'Bad Request',
+    message: 'Not find product for provided id',
   }
 };

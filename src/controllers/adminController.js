@@ -1,10 +1,12 @@
 const errorMsg = require('../helpers/errorMessage').errorMessages;
 const utils = require('../helpers/utils');
 const Joi = require('joi');
+const { errorMessages } = require('../helpers/errorMessage');
 
+const mongoose = require('mongoose');
 const Mobile = require('../models/mobile');
 
-const addMobileSchema = Joi.object({
+const mobileSchema = Joi.object({
   brand: Joi.string().max(10).required(),
   device: Joi.string().max(12).required(),
   price: Joi.number().positive().required(),
@@ -16,8 +18,8 @@ const options = { abortEarly : false };
 exports.addMobile = (req, res) => {
   try {
     const { brand, device, price, quantity } = req.body;
-    data = { brand, device, price, quantity };
-    const validationResult = utils.validateProvidedData(addMobileSchema, data, options);
+    const data = { brand, device, price, quantity };
+    const validationResult = utils.validateProvidedData(mobileSchema, data, options);
     if (validationResult) {
       return res.status(422).send(utils.responseMsg(validationResult));
     };
@@ -47,6 +49,20 @@ exports.updateMobile = async (req, res) => {
   try {
     const { id } = req.params;
     const { brand, device, price, quantity } = req.body;
+    // validation start
+    const data = { brand, device, price, quantity };
+    const validationResult = utils.validateProvidedData(mobileSchema, data, options);
+    if (validationResult) {
+      return res.status(422).send(utils.responseMsg(validationResult));
+    };
+    const isValidId = mongoose.Types.ObjectId.isValid(id);
+    if (!isValidId) {
+      return res.status(404).send(utils.responseMsg(errorMessages.idNotValid));
+    }
+    const hasProduct = await Mobile.find({ _id: id });
+    if (!hasProduct.length) {
+      return res.status(404).send(utils.responseMsg(errorMessages.productNotFound));
+    }
     const newMobile = {
       brand: brand,
       device: device,
@@ -73,6 +89,14 @@ exports.updateMobile = async (req, res) => {
 exports.deleteMobile = async (req, res) => {
   try {
     const { id } = req.params;
+    const isValidId = mongoose.Types.ObjectId.isValid(id);
+    if (!isValidId) {
+      return res.status(404).send(utils.responseMsg(errorMessages.idNotValid));
+    }
+    const hasProduct = await Mobile.find({ _id: id });
+    if (!hasProduct.length) {
+      return res.status(404).send(utils.responseMsg(errorMessages.productNotFound));
+    }
     const result = await Mobile.deleteOne({ _id: id });
     if (result.deletedCount) {
       return res.status(200).send(utils.responseMsg(null, true, result));
