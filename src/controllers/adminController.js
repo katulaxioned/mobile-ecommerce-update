@@ -1,11 +1,26 @@
 const errorMsg = require('../helpers/errorMessage').errorMessages;
 const utils = require('../helpers/utils');
+const Joi = require('joi');
 
 const Mobile = require('../models/mobile');
+
+const addMobileSchema = Joi.object({
+  brand: Joi.string().max(10).required(),
+  device: Joi.string().max(12).required(),
+  price: Joi.number().positive().required(),
+  quantity: Joi.number().integer().positive().required()
+});
+
+const options = { abortEarly : false };
 
 exports.addMobile = (req, res) => {
   try {
     const { brand, device, price, quantity } = req.body;
+    data = { brand, device, price, quantity };
+    const validationResult = utils.validateProvidedData(addMobileSchema, data, options);
+    if (validationResult) {
+      return res.status(422).send(utils.responseMsg(validationResult));
+    };
     const newMobile = new Mobile({
       brand: brand,
       device: device,
